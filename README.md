@@ -30,3 +30,7 @@ composer require phpbg/mini-httpd
 
 ## Examples
 See `example` folder for a complete demo.
+
+## TODO
+* writing tests
+* writing at least one HTML renderer
