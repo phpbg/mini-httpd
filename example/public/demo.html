@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PHPBG Mini httpd tasks demo</title>
+    <link rel="stylesheet" href="demo.css">
+    <script src="vue-2.5.17.js"></script>
+    <script src="jquery-3.3.1.js"></script>
+</head>
+<body>
+
+<div id="myFirstReactPhpApp">
+    <h1>Tasks demo</h1>
+
+    <p v-show="showWait">Please wait</p>
+
+    <p v-show="showEarlyError" class="ajaxError">{{ajaxError}}</p>
+
+    <ul>
+        <li v-for="task in tasks">
+            {{task}}
+        </li>
+    </ul>
+
+    <form @submit.prevent="addTask" v-show="tasks">
+        <h1>Add</h1>
+        <label>Task <input type="text" v-model="newtask"></label>
+        <p v-show="ajaxError" class="ajaxError">{{ajaxError}}</p>
+        <button type="submit" :disabled="disableForm">Save</button>
+        <button type="button" @click="addTaskAsync" :disabled="disableForm">Save with asynchronous response</button>
+    </form>
+
+</div>
+<script src="demo.js"></script>
+</body>
+</html>

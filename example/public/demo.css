@@ -1,0 +1,8 @@
+form > * {
+    display: block;
+}
+
+.ajaxError {
+    color: red;
+    font-weight: bold;
+}
