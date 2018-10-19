@@ -1,21 +1,24 @@
-<h1><?= $this->title ?></h1>
+<div class="w3-container">
+    <h1><?= $this->title ?></h1>
 
-<div id="myFirstReactPhpApp" v-cloak>
-    <p v-show="showWait">Please wait</p>
+    <div id="myFirstReactPhpApp" v-cloak>
+        <p v-show="showWait">Please wait</p>
 
-    <p v-show="showEarlyError" class="ajaxError">{{ajaxError}}</p>
+        <p v-show="showEarlyError" class="ajaxError">{{ajaxError}}</p>
 
-    <ul>
-        <li v-for="task in tasks">
-            {{task}}
-        </li>
-    </ul>
+        <h2>Tasks</h2>
+        <ul class="w3-ul w3-border">
+            <li v-for="task in tasks">
+                {{task}}
+            </li>
+        </ul>
 
-    <form @submit.prevent="addTask" v-show="tasks">
-        <h1>Add</h1>
-        <label>Task <input type="text" v-model="newtask"></label>
-        <p v-show="ajaxError" class="ajaxError">{{ajaxError}}</p>
-        <button type="submit" :disabled="disableForm">Save</button>
-        <button type="button" @click="addTaskAsync" :disabled="disableForm">Save with asynchronous response</button>
-    </form>
+        <form @submit.prevent="addTask" v-show="tasks">
+            <h2>Add a task</h2>
+            <label>Task <input class="w3-input w3-border" type="text" v-model="newtask"></label>
+            <button class="w3-margin-top w3-margin-bottom w3-button w3-green" type="submit" :disabled="disableForm">Save</button>
+            <button class="w3-margin-top w3-margin-bottom w3-button w3-green" type="button" @click="addTaskAsync" :disabled="disableForm">Save with asynchronous response</button>
+            <span v-show="ajaxError" class="ajaxError">{{ajaxError}}</span>
+        </form>
+    </div>
 </div>

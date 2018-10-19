@@ -102,11 +102,15 @@ class Phtml implements RendererInterface
             if (! empty($options['bottomScripts'])) {
                 $options['bottomScripts'] = array_unique($options['bottomScripts']);
             }
+            if (! empty($options['headCss'])) {
+                $options['headCss'] = array_unique($options['headCss']);
+            }
             $layoutData = [
                 'content' => $content,
                 'inlineCss' => $options['inlineCss'] ?? null,
                 'inlineScripts' => $options['inlineScripts'] ?? null,
-                'bottomScripts' => $options['bottomScripts'] ?? null
+                'bottomScripts' => $options['bottomScripts'] ?? null,
+                'headCss' => $options['headCss'] ?? null
             ];
             $layoutTemplate = new Template($layoutFilePath, $layoutData);
             $content = $layoutTemplate->getContent();

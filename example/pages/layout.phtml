@@ -8,6 +8,11 @@
             echo "<link rel='preload' href='{$src}' as='script'>";
         }
     }
+    if (!empty($this->headCss)) {
+        foreach ($this->headCss as $src) {
+            echo "<link rel='stylesheet' type='text/css' href='{$src}'>";
+        }
+    }
     if (!empty($this->inlineCss)) {
         foreach ($this->inlineCss as $css) {
             echo "<style>{$css}</style>";
