@@ -62,7 +62,7 @@ class Phtml implements RendererInterface
         try {
             $viewFilePath = $options['viewFilePath'] ?? null;
             $layoutFilePath = $options['layoutFilePath'] ?? $this->defaultLayout ?? null;
-            $content = $this->getContent($data, $viewFilePath, $layoutFilePath);
+            $content = $this->getContent($data, $options, $viewFilePath, $layoutFilePath);
         } catch (\Exception $e) {
             $this->getContext($request)->applicationContext->logger->warning("Unexpected rendering error", ['exception' => $e]);
             return $this->renderException($request, $e);
@@ -87,7 +87,7 @@ class Phtml implements RendererInterface
         return $response;
     }
 
-    protected function getContent($data, string $viewFilePath = null, string $layoutFilePath = null)
+    protected function getContent($data, array $options, string $viewFilePath = null, string $layoutFilePath = null)
     {
         $content = '';
 
@@ -99,7 +99,16 @@ class Phtml implements RendererInterface
 
         //Configure Layout
         if ($layoutFilePath) {
-            $layoutTemplate = new Template($layoutFilePath, ['content' => $content]);
+            if (! empty($options['bottomScripts'])) {
+                $options['bottomScripts'] = array_unique($options['bottomScripts']);
+            }
+            $layoutData = [
+                'content' => $content,
+                'inlineCss' => $options['inlineCss'] ?? null,
+                'inlineScripts' => $options['inlineScripts'] ?? null,
+                'bottomScripts' => $options['bottomScripts'] ?? null
+            ];
+            $layoutTemplate = new Template($layoutFilePath, $layoutData);
             $content = $layoutTemplate->getContent();
         }
 

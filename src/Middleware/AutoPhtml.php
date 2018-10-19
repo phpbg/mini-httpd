@@ -46,11 +46,32 @@ class AutoPhtml
             $rc = new \ReflectionClass(get_class($context->route->handler));
             $controllerFilePath = $rc->getFileName();
             $controllerFilePathinfo = pathinfo($controllerFilePath);
+
+            // PHTML view file
             $phtmlFile = "{$controllerFilePathinfo['dirname']}/{$controllerFilePathinfo['filename']}.phtml";
             if (!array_key_exists('viewFilePath', $context->renderOptions)) {
                 $context->renderOptions['viewFilePath'] = $phtmlFile;
             }
-            // TODO CSS and JS files, here ?
+
+            // JS file
+            $jsFile = "{$controllerFilePathinfo['dirname']}/{$controllerFilePathinfo['filename']}.js";
+            if (!isset($context->renderOptions['inlineScripts'])) {
+                $context->renderOptions['inlineScripts'] = [];
+            }
+            if (is_file($jsFile)) {
+                //TODO async file get contents?
+                $context->renderOptions['inlineScripts'][] = file_get_contents($jsFile);
+            }
+
+            // CSS file
+            $cssFile = "{$controllerFilePathinfo['dirname']}/{$controllerFilePathinfo['filename']}.css";
+            if (!isset($context->renderOptions['inlineCss'])) {
+                $context->renderOptions['inlineCss'] = [];
+            }
+            if (is_file($cssFile)) {
+                //TODO async file get contents?
+                $context->renderOptions['inlineCss'][] = file_get_contents($cssFile);
+            }
         }
 
         return $result;

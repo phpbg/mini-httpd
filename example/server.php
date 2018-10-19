@@ -5,7 +5,7 @@ require __DIR__ . '/../vendor/autoload.php';
 // Manual requires for demo purpose.
 // In real life use composer autoload features
 require __DIR__ . '/api/Tasks.php';
-require __DIR__ . '/pages/Test.php';
+require __DIR__ . '/pages/Demo.php';
 
 $loop = React\EventLoop\Factory::create();
 $jsonRenderer = new \PhpBg\MiniHttpd\Renderer\Json();
@@ -13,7 +13,7 @@ $taskController = new Tasks();
 $routes = [
     // Redirection example
     '/' => new \PhpBg\MiniHttpd\Model\Route(function () {
-        throw new \PhpBg\MiniHttpd\HttpException\RedirectException('/demo.html');
+        throw new \PhpBg\MiniHttpd\HttpException\RedirectException('/demo');
     }, $jsonRenderer),
 
     // Inline callable example, that return an array rendered as JSON
@@ -27,7 +27,7 @@ $routes = [
     // Controller callback, with request manipulation, that return a promise
     '/api/task/add-async' => new \PhpBg\MiniHttpd\Model\Route([$taskController, 'addAsync'], $jsonRenderer),
 
-    '/html' => new \PhpBg\MiniHttpd\Model\Route(new Test(), new \PhpBg\MiniHttpd\Renderer\Phtml\Phtml(__DIR__ . '/pages/layout.phtml')),
+    '/demo' => new \PhpBg\MiniHttpd\Model\Route(new Demo(), new \PhpBg\MiniHttpd\Renderer\Phtml\Phtml(__DIR__ . '/pages/layout.phtml')),
 ];
 
 // Application context will be injected in a request attribute.
