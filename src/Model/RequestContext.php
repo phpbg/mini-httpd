@@ -58,6 +58,14 @@ class RequestContext
      */
     public $route;
 
+    /**
+     * Options to pass to renderer
+     * Options are renderer specific, @see your \PhpBg\MiniHttpd\Renderer\RendererInterface implementation
+     *
+     * @var array
+     */
+    public $renderOptions = [];
+
     public function __construct(ApplicationContext $context)
     {
         $this->applicationContext = $context;

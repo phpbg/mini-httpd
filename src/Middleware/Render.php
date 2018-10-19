@@ -72,7 +72,8 @@ class Render
                         // Handle Response: passthrough
                         return $result;
                     }
-                    return $context->route->renderer->render($request, $result);
+                    $response = $context->getResponse();
+                    return $context->route->renderer->render($request, $response, $context->renderOptions, $result);
                 },
                 function (\Exception $e) use ($request) {
                     return $this->doRenderException($request, $e);
@@ -93,7 +94,9 @@ class Render
         }
 
         $renderer = $this->getRenderer($request);
-        return $renderer->renderException($request, $e);
+        $context = $this->getContext($request);
+        $response = $context->getResponse();
+        return $renderer->renderException($request, $response, $context->renderOptions, $e);
     }
 
     /**

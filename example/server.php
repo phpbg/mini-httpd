@@ -2,52 +2,14 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-/**
- * This is a sample tasks management class.
- */
-class TasksController extends \PhpBg\MiniHttpd\Controller\AbstractController
-{
-    use \PhpBg\MiniHttpd\Middleware\ContextTrait;
-
-    // Initial tasks
-    public $tasks = ['task1', 'task2'];
-
-    /**
-     * Simple add task example
-     */
-    public function add(\Psr\Http\Message\ServerRequestInterface $request)
-    {
-        try {
-            $task = $this->getFromPost($request, 'task', null, new \Zend\Validator\NotEmpty());
-        } catch (\PhpBg\MiniHttpd\Model\ValidateException $e) {
-            throw new \PhpBg\MiniHttpd\HttpException\BadRequestException($e->getMessage());
-        }
-        $this->tasks[] = $task;
-        return $this->tasks;
-    }
-
-    /**
-     * Asynchronous add task example
-     */
-    public function addAsync(\Psr\Http\Message\ServerRequestInterface $request)
-    {
-        return new React\Promise\Promise(function($resolve, $reject) use ($request) {
-            $this->getContext($request)->applicationContext->loop->addTimer(2, function() use ($resolve, $reject, $request) {
-                try {
-                    $task = $this->getFromPost($request, 'task', null, new \Zend\Validator\NotEmpty());
-                } catch (\PhpBg\MiniHttpd\Model\ValidateException $e) {
-                    return $reject(new \PhpBg\MiniHttpd\HttpException\BadRequestException($e->getMessage()));
-                }
-                $this->tasks[] = $task;
-                return $resolve($this->tasks);
-            });
-        });
-    }
-}
+// Manual requires for demo purpose.
+// In real life use composer autoload features
+require __DIR__ . '/api/Tasks.php';
+require __DIR__ . '/pages/Test.php';
 
 $loop = React\EventLoop\Factory::create();
 $jsonRenderer = new \PhpBg\MiniHttpd\Renderer\Json();
-$taskController = new TasksController();
+$taskController = new Tasks();
 $routes = [
     // Redirection example
     '/' => new \PhpBg\MiniHttpd\Model\Route(function () {
@@ -64,6 +26,8 @@ $routes = [
 
     // Controller callback, with request manipulation, that return a promise
     '/api/task/add-async' => new \PhpBg\MiniHttpd\Model\Route([$taskController, 'addAsync'], $jsonRenderer),
+
+    '/html' => new \PhpBg\MiniHttpd\Model\Route(new Test(), new \PhpBg\MiniHttpd\Renderer\Phtml\Phtml(__DIR__ . '/pages/layout.phtml')),
 ];
 
 // Application context will be injected in a request attribute.
@@ -73,7 +37,7 @@ $applicationContext = new \PhpBg\MiniHttpd\Model\ApplicationContext();
 // You may require loop for async tasks
 $applicationContext->loop = $loop;
 
-// You can put your configuration directves in options
+// You can put your configuration directives in options
 $applicationContext->options = [];
 $applicationContext->routes = $routes;
 
@@ -104,6 +68,9 @@ $server = new \React\Http\Server([
 
     // Calculate route
     new \PhpBg\MiniHttpd\Middleware\Route(),
+
+    // Auto render PHTML files
+    new \PhpBg\MiniHttpd\Middleware\AutoPhtml(),
 
     // Run route selected
     new \PhpBg\MiniHttpd\Middleware\Run()

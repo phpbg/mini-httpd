@@ -24,39 +24,35 @@
  * SOFTWARE.
  */
 
-namespace PhpBg\MiniHttpd\Renderer;
+namespace PhpBg\MiniHttpd\Middleware;
 
-use PhpBg\MiniHttpd\HttpException\HttpException;
-use Psr\Http\Message\ResponseInterface;
+use PhpBg\MiniHttpd\Renderer\Phtml\Phtml;
 use Psr\Http\Message\ServerRequestInterface;
-use function RingCentral\Psr7\stream_for;
 
 /**
- * JSON Renderer
+ * Automatically calculate files to render with PHTML renderer
+ * Will look for phtml, css and javascript files with same name/location as your controller
+ * Example: your controller is called Test.php, it will look for Test.phtml, Test.css and Test.js
  */
-class Json implements RendererInterface
+class AutoPhtml
 {
-    public function render(ServerRequestInterface $request, ResponseInterface $response, array $options, $data): ResponseInterface
-    {
-        $response = $response->withHeader('Content-Type', 'application/json');
-        $response = $response->withBody(stream_for(json_encode($data)));
-        return $response;
-    }
+    use ContextTrait;
 
-    public function renderException(ServerRequestInterface $request, ResponseInterface $response, array $options, \Exception $exception): ResponseInterface
+    public function __invoke(ServerRequestInterface $request, callable $next)
     {
-        $response = $response->withHeader('Content-Type', 'application/json');
-        if ($exception instanceof HttpException) {
-            $response = $response->withStatus($exception->httpStatus);
-            $data = [
-                'message' => $exception->getMessage(),
-                'details' => $exception->data
-            ];
-            $response = $response->withBody(stream_for(json_encode($data)));
-        } else {
-            $response = $response->withStatus(500);
+        $result = $next($request);
+        $context = $this->getContext($request);
+        if ($context->route->renderer instanceof Phtml && is_object($context->route->handler)) {
+            $rc = new \ReflectionClass(get_class($context->route->handler));
+            $controllerFilePath = $rc->getFileName();
+            $controllerFilePathinfo = pathinfo($controllerFilePath);
+            $phtmlFile = "{$controllerFilePathinfo['dirname']}/{$controllerFilePathinfo['filename']}.phtml";
+            if (!array_key_exists('viewFilePath', $context->renderOptions)) {
+                $context->renderOptions['viewFilePath'] = $phtmlFile;
+            }
+            // TODO CSS and JS files, here ?
         }
 
-        return $response;
+        return $result;
     }
 }

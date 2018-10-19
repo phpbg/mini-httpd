@@ -24,31 +24,9 @@
  * SOFTWARE.
  */
 
-namespace PhpBg\MiniHttpd\Renderer;
+namespace PhpBg\MiniHttpd\Renderer\Phtml;
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-
-interface RendererInterface
+class PhtmlException extends \Exception
 {
-    /**
-     * Render data returned by route execution
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @param array $options Options to pass to renderer
-     * @param mixed $data Data to render
-     * @return ResponseInterface
-     */
-    public function render(ServerRequestInterface $request, ResponseInterface $response, array $options, $data): ResponseInterface;
 
-    /**
-     * Render an Exception
-     * Note that the exception may extend \PhpBg\MiniHttpd\HttpException\HttpException that provides additionnal rendering content
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @param array $options Options to pass to renderer
-     * @param \Exception $exception
-     * @return ResponseInterface
-     */
-    public function renderException(ServerRequestInterface $request, ResponseInterface $response, array $options, \Exception $exception): ResponseInterface;
 }
