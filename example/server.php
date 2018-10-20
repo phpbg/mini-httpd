@@ -88,4 +88,5 @@ $server = new \React\Http\Server([
 // just open your browser and go to http://localhost:8080
 $socket = new React\Socket\Server(8080, $loop);
 $server->listen($socket);
+$applicationContext->logger->notice("Server started");
 $loop->run();

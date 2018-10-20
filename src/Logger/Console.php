@@ -49,6 +49,7 @@ class Console extends AbstractLogger
     private $formatter;
     private $handle;
 
+    //TODO use a WritableStreamInterface for output, see https://github.com/WyriHaximus/reactphp-psr-3-stdio/blob/master/src/StdioLogger.php
     public function __construct(string $minLevel = LogLevel::WARNING, $output = 'php://stderr', callable $formatter = null)
     {
         if (!isset(self::$levels[$minLevel])) {
@@ -77,7 +78,7 @@ class Console extends AbstractLogger
 
         $formatter = $this->formatter;
 
-        //TODO investigate async write
+        //TODO use WritableStreamInterface
         fwrite($this->handle, $formatter($level, $message, $context));
     }
 
