@@ -84,9 +84,17 @@ $server = new \React\Http\Server([
     new \PhpBg\MiniHttpd\Middleware\Run()
 ]);
 
+// Log server errors
+$server->on('error', function($exception) use ($applicationContext) {
+    $applicationContext->logger->error('', ['exception' => $exception]);
+});
+
 // Run server on port 8080
 // just open your browser and go to http://localhost:8080
 $socket = new React\Socket\Server(8080, $loop);
 $server->listen($socket);
+if (extension_loaded('xdebug')) {
+    $applicationContext->logger->warning('The "xdebug" extension is loaded, this has a major impact on performance.');
+}
 $applicationContext->logger->notice("Server started");
 $loop->run();
