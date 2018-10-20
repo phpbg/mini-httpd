@@ -74,10 +74,10 @@ class StaticContent
         // make sure we serve only within public path
         if ($realPath !== false && strpos($realPath, $this->publicPath) === 0 && is_file($realPath)) {
             $extension = pathinfo($realPath, PATHINFO_EXTENSION);
-            $mime = $this->mimeDb->getFromExtension($extension);
             $headers = [
                 'Cache-Control' => 'public, max-age=31536000' //1 year of cache, make sure you change URLs when changing resources
             ];
+            $mime = $this->mimeDb->getFromExtension($extension);
             if ($mime !== null) {
                 $headers['Content-Type'] = $mime['name'];
             }

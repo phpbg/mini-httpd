@@ -47,6 +47,8 @@ $applicationContext->publicPath = __DIR__ . '/public';
 // You can share your PSR3 logger here
 $applicationContext->logger = new \PhpBg\MiniHttpd\Logger\Console(\Psr\Log\LogLevel::DEBUG);
 
+$mimeDb = new \PhpBg\MiniHttpd\MimeDb\MimeDb($applicationContext->logger);
+
 $server = new \React\Http\Server([
     // Log all incoming requests
     new \PhpBg\MiniHttpd\Middleware\LogRequest($applicationContext->logger),
@@ -56,6 +58,12 @@ $server = new \React\Http\Server([
 
     // Decode once uri path
     new \PhpBg\MiniHttpd\Middleware\UriPath(),
+
+    // Compress compressible responses
+    new \PhpBg\MiniHttpd\Middleware\ResponseCompressionMiddleware([
+        new \Sikei\React\Http\Middleware\CompressionGzipHandler(new \Sikei\React\Http\Middleware\Detector\ArrayDetector($mimeDb->getCompressible())),
+        new \Sikei\React\Http\Middleware\CompressionDeflateHandler(new \Sikei\React\Http\Middleware\Detector\ArrayDetector($mimeDb->getCompressible())),
+    ]),
 
     // Serve static files
     new \PhpBg\MiniHttpd\Middleware\StaticContent($applicationContext->publicPath, $applicationContext->logger),

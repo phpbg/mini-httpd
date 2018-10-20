@@ -38,6 +38,8 @@ class MimeDb
 {
     protected $byExtension;
 
+    protected $byName;
+
     public function __construct(LoggerInterface $logger)
     {
         $dbFile = __DIR__ . '/db.json';
@@ -50,17 +52,16 @@ class MimeDb
             throw new MimeDbException("Could not read {$dbFile}");
         }
 
-        $dbArray = json_decode($dbStr, true);
-        if ($dbArray === false) {
+        $this->byName = json_decode($dbStr, true);
+        if ($this->byName === false) {
             throw new MimeDbException("Could not parse {$dbFile}");
         }
 
         $extensions = [];
-        foreach ($dbArray as $mimeName => $mimeInfo) {
+        foreach ($this->byName as $mimeName => $mimeInfo) {
             if (empty($mimeInfo['extensions'])) {
                 continue;
             }
-            $mimeInfo['compressible'] = $mimeInfo['compressible'] ?? false;
             foreach ($mimeInfo['extensions'] as $extension) {
                 $extensions[$extension][] = array_merge(['name' => $mimeName], $mimeInfo);
             }
@@ -99,10 +100,10 @@ class MimeDb
     }
 
     /**
-     * Return mime info by file extension.
-     * Mime info is an array containing:
+     * Return mime descriptor by file extension.
+     * Mime descriptor is an array containing:
      *   - name: string: mime type name (aka "content type" in HTTP context). Eg application/json
-     *   - compressible: boolean: tells whether the mime type can be compressed
+     *   - other data described here: https://github.com/jshttp/mime-db
      *
      * @param string $extension
      * @return array|null
@@ -113,5 +114,19 @@ class MimeDb
             return null;
         }
         return $this->byExtension[$extension] ?? null;
+    }
+
+    /**
+     * Return compressible mime names
+     * @return array
+     */
+    public function getCompressible():array {
+        $compressible = [];
+        foreach ($this->byName as $name => $descriptor) {
+            if (isset($descriptor['compressible']) && $descriptor['compressible']) {
+                $compressible[] = $name;
+            }
+        }
+        return $compressible;
     }
 }

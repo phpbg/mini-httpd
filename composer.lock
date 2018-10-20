@@ -4,8 +4,164 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "5f0da8ab34ef099bae3cf8194a026830",
+    "hash": "765b4abd1b980704d7bf977fdb9458a8",
+    "content-hash": "4f4098df1a6d16c1a84b6724b0909288",
     "packages": [
+        {
+            "name": "christoph-kluge/reactphp-http-response-compression-middleware",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/christoph-kluge/reactphp-http-response-compression-middleware.git",
+                "reference": "5abae54b6d333ab47216cf1e8b282d07620799b4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/christoph-kluge/reactphp-http-response-compression-middleware/zipball/5abae54b6d333ab47216cf1e8b282d07620799b4",
+                "reference": "5abae54b6d333ab47216cf1e8b282d07620799b4",
+                "shasum": ""
+            },
+            "require": {
+                "clue/zlib-react": "^0.2",
+                "php": ">=5.6.0",
+                "psr/http-message": "^1.0",
+                "react/promise": "^2.5"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.10||^5.0",
+                "react/http": "dev-master",
+                "ringcentral/psr7": "^1.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Sikei\\React\\Http\\Middleware\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christoph Kluge",
+                    "email": "work@christoph-kluge.eu"
+                }
+            ],
+            "description": "A response compression middleware for the ReactPHP HTTP-Server",
+            "time": "2017-10-24 09:44:47"
+        },
+        {
+            "name": "clue/stream-filter",
+            "version": "v1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/clue/php-stream-filter.git",
+                "reference": "d80fdee9b3a7e0d16fc330a22f41f3ad0eeb09d0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/clue/php-stream-filter/zipball/d80fdee9b3a7e0d16fc330a22f41f3ad0eeb09d0",
+                "reference": "d80fdee9b3a7e0d16fc330a22f41f3ad0eeb09d0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.0 || ^4.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Clue\\StreamFilter\\": "src/"
+                },
+                "files": [
+                    "src/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christian Lück",
+                    "email": "christian@lueck.tv"
+                }
+            ],
+            "description": "A simple and modern approach to stream filtering in PHP",
+            "homepage": "https://github.com/clue/php-stream-filter",
+            "keywords": [
+                "bucket brigade",
+                "callback",
+                "filter",
+                "php_user_filter",
+                "stream",
+                "stream_filter_append",
+                "stream_filter_register"
+            ],
+            "time": "2017-08-18 09:54:01"
+        },
+        {
+            "name": "clue/zlib-react",
+            "version": "v0.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/clue/reactphp-zlib.git",
+                "reference": "a33294df35a29234a8f88336a568cca963bfab82"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/clue/reactphp-zlib/zipball/a33294df35a29234a8f88336a568cca963bfab82",
+                "reference": "a33294df35a29234a8f88336a568cca963bfab82",
+                "shasum": ""
+            },
+            "require": {
+                "clue/stream-filter": "~1.3",
+                "php": ">=5.3",
+                "react/stream": "^1.0 || ^0.7 || ^0.6"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.0 || ^4.8",
+                "react/event-loop": "^1.0 || ^0.5 || ^0.4 || ^0.3"
+            },
+            "suggest": {
+                "ext-zlib": "Requires ext-zlib extension"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Clue\\React\\Zlib\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christian Lück",
+                    "email": "christian@lueck.tv"
+                }
+            ],
+            "description": "Streaming zlib compressor and decompressor for ReactPHP, supporting compression and decompression of ZLIB format, raw DEFLATE format and GZIP format (RFC 1950, RFC 1951 and RFC 1952).",
+            "homepage": "https://github.com/clue/reactphp-zlib",
+            "keywords": [
+                "RFC 1950",
+                "RFC 1951",
+                "RFC 1952",
+                "compression",
+                "decompression",
+                "deflate",
+                "gz",
+                "gzip",
+                "inflate",
+                "reactphp",
+                "zlib"
+            ],
+            "time": "2018-05-11 12:05:21"
+        },
         {
             "name": "container-interop/container-interop",
             "version": "1.2.0",
@@ -34,7 +190,7 @@
             ],
             "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
             "homepage": "https://github.com/container-interop/container-interop",
-            "time": "2017-02-14T19:40:03+00:00"
+            "time": "2017-02-14 19:40:03"
         },
         {
             "name": "evenement/evenement",
@@ -76,7 +232,7 @@
                 "event-dispatcher",
                 "event-emitter"
             ],
-            "time": "2017-07-23T21:35:13+00:00"
+            "time": "2017-07-23 21:35:13"
         },
         {
             "name": "psr/container",
@@ -124,7 +280,7 @@
                 "container-interop",
                 "psr"
             ],
-            "time": "2017-02-14T16:28:37+00:00"
+            "time": "2017-02-14 16:28:37"
         },
         {
             "name": "psr/http-message",
@@ -173,7 +329,7 @@
                 "request",
                 "response"
             ],
-            "time": "2016-08-06T14:39:51+00:00"
+            "time": "2016-08-06 14:39:51"
         },
         {
             "name": "psr/log",
@@ -219,7 +375,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2016-10-10T12:19:37+00:00"
+            "time": "2016-10-10 12:19:37"
         },
         {
             "name": "react/cache",
@@ -258,7 +414,7 @@
                 "promise",
                 "reactphp"
             ],
-            "time": "2018-06-25T12:52:40+00:00"
+            "time": "2018-06-25 12:52:40"
         },
         {
             "name": "react/dns",
@@ -302,7 +458,7 @@
                 "dns-resolver",
                 "reactphp"
             ],
-            "time": "2018-07-02T12:17:56+00:00"
+            "time": "2018-07-02 12:17:56"
         },
         {
             "name": "react/event-loop",
@@ -342,7 +498,7 @@
                 "asynchronous",
                 "event-loop"
             ],
-            "time": "2018-07-11T14:37:46+00:00"
+            "time": "2018-07-11 14:37:46"
         },
         {
             "name": "react/http",
@@ -389,7 +545,7 @@
                 "server",
                 "streaming"
             ],
-            "time": "2018-04-11T15:03:27+00:00"
+            "time": "2018-04-11 15:03:27"
         },
         {
             "name": "react/promise",
@@ -434,7 +590,7 @@
                 "promise",
                 "promises"
             ],
-            "time": "2018-06-13T15:59:06+00:00"
+            "time": "2018-06-13 15:59:06"
         },
         {
             "name": "react/promise-stream",
@@ -489,7 +645,7 @@
                 "stream",
                 "unwrap"
             ],
-            "time": "2017-12-22T12:02:05+00:00"
+            "time": "2017-12-22 12:02:05"
         },
         {
             "name": "react/promise-timer",
@@ -541,7 +697,7 @@
                 "timeout",
                 "timer"
             ],
-            "time": "2018-06-13T16:45:37+00:00"
+            "time": "2018-06-13 16:45:37"
         },
         {
             "name": "react/socket",
@@ -587,7 +743,7 @@
                 "reactphp",
                 "stream"
             ],
-            "time": "2018-10-01T12:20:53+00:00"
+            "time": "2018-10-01 12:20:53"
         },
         {
             "name": "react/stream",
@@ -632,7 +788,7 @@
                 "stream",
                 "writable"
             ],
-            "time": "2018-07-11T14:38:16+00:00"
+            "time": "2018-07-11 14:38:16"
         },
         {
             "name": "ringcentral/psr7",
@@ -689,7 +845,7 @@
                 "stream",
                 "uri"
             ],
-            "time": "2018-01-15T21:00:49+00:00"
+            "time": "2018-01-15 21:00:49"
         },
         {
             "name": "zendframework/zend-filter",
@@ -751,7 +907,7 @@
                 "filter",
                 "zf"
             ],
-            "time": "2018-04-11T16:20:04+00:00"
+            "time": "2018-04-11 16:20:04"
         },
         {
             "name": "zendframework/zend-stdlib",
@@ -796,7 +952,7 @@
                 "stdlib",
                 "zf"
             ],
-            "time": "2018-08-28T21:34:05+00:00"
+            "time": "2018-08-28 21:34:05"
         },
         {
             "name": "zendframework/zend-validator",
@@ -866,13 +1022,15 @@
                 "validator",
                 "zf2"
             ],
-            "time": "2018-02-01T17:05:33+00:00"
+            "time": "2018-02-01 17:05:33"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "christoph-kluge/reactphp-http-response-compression-middleware": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
