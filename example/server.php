@@ -58,7 +58,7 @@ $server = new \React\Http\Server([
     new \PhpBg\MiniHttpd\Middleware\UriPath(),
 
     // Serve static files
-    new \PhpBg\MiniHttpd\Middleware\StaticContent($applicationContext->publicPath),
+    new \PhpBg\MiniHttpd\Middleware\StaticContent($applicationContext->publicPath, $applicationContext->logger),
 
     // Prepare fore rendering
     new \PhpBg\MiniHttpd\Middleware\Render($jsonRenderer),

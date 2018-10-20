@@ -26,7 +26,9 @@
 
 namespace PhpBg\MiniHttpd\Middleware;
 
+use PhpBg\MiniHttpd\MimeDb\MimeDb;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Serve static files
@@ -35,12 +37,22 @@ class StaticContent
 {
     use ContextTrait;
 
+    /**
+     * @see StaticContent::__construct()
+     * @var string
+     */
     protected $publicPath;
 
     /**
-     * @param string $publicPath Full path to the directory that contain files to serve. Ex: /var/www/public
+     * @var MimeDb
      */
-    public function __construct(string $publicPath)
+    protected $mimeDb;
+
+    /**
+     * @param string $publicPath Full path to the directory that contain files to serve. Ex: /var/www/public
+     * @param LoggerInterface $logger
+     */
+    public function __construct(string $publicPath, LoggerInterface $logger)
     {
         if (!is_dir($publicPath)) {
             throw new \RuntimeException();
@@ -50,6 +62,7 @@ class StaticContent
             throw new \RuntimeException();
         }
         $this->publicPath = $publicPath;
+        $this->mimeDb = new MimeDb($logger);
     }
 
     public function __invoke(ServerRequestInterface $request, callable $next = null)
@@ -60,11 +73,16 @@ class StaticContent
         // serve static file without calling next middleware
         // make sure we serve only within public path
         if ($realPath !== false && strpos($realPath, $this->publicPath) === 0 && is_file($realPath)) {
+            $extension = pathinfo($realPath, PATHINFO_EXTENSION);
+            $mime = $this->mimeDb->getFromExtension($extension);
+            $headers = [];
+            if ($mime !== null) {
+                $headers['Content-Type'] = $mime['name'];
+            }
             return new \React\Http\Response(
                 200,
-                array(//'Content-Type' => 'TODO'
-                ),
-                // Beware that this is not for production use, mainly because native php file streams may or not be blocking, who knows...?
+                $headers,
+                // Beware that this won't achieve good performance and scalability, mainly because native php file streams may or not be blocking, who knows...?
                 // @see https://bugs.php.net/bug.php?id=75538
                 fopen($realPath, 'rb')
             );
