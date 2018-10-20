@@ -41,7 +41,7 @@ class MimeDb
     public function __construct(LoggerInterface $logger)
     {
         $dbFile = __DIR__ . '/db.json';
-        if (! is_file($dbFile)) {
+        if (!is_file($dbFile)) {
             throw new MimeDbException("{$dbFile} not found");
         }
 
@@ -56,32 +56,46 @@ class MimeDb
         }
 
         $extensions = [];
-        $extensionsToDelete = [];
         foreach ($dbArray as $mimeName => $mimeInfo) {
             if (empty($mimeInfo['extensions'])) {
                 continue;
             }
+            $mimeInfo['compressible'] = $mimeInfo['compressible'] ?? false;
             foreach ($mimeInfo['extensions'] as $extension) {
-                if (isset($extensions[$extension])) {
-                    $extensionsToDelete[] = $extension;
-                    continue;
-                }
-                $extensions[$extension] = [
-                    'name' => $mimeName,
-                    'compressible' => $mimeInfo['compressible'] ?? false
-                ];
+                $extensions[$extension][] = array_merge(['name' => $mimeName], $mimeInfo);
             }
 
         }
-        if (! empty($extensionsToDelete)) {
-            $logger->debug("MIME extensions ignored (duplicates)", $extensionsToDelete);
-            foreach ($extensionsToDelete as $extension) {
-                unset($extensions[$extension]);
+
+        // Handle extension duplicates
+        $extensionsFromIana = [];
+        $extensionsWhatever = [];
+        $this->byExtension = [];
+        foreach ($extensions as $extension => $extensionList) {
+            $this->byExtension[$extension] = $this->selectExtensionDescriptor($extension, $extensionList, $extensionsFromIana, $extensionsWhatever);
+        };
+        $logger->debug("MIME extensions",$extensions);
+        $logger->info("MIME: " . count($extensions) . " extensions loaded");
+        $logger->debug("MIME: following extensions have duplicates resolved with IANA flavor", $extensionsFromIana);
+        $logger->debug("MIME: following extensions have duplicates resolved randomly", $extensionsWhatever);
+    }
+
+    protected function selectExtensionDescriptor(string $extension, array $extensionList, array &$extensionsFromIana, array &$extensionsWhatever)
+    {
+        if (count($extensionList) === 1) {
+            // No duplicate: GG
+            return array_pop($extensionList);
+        }
+        foreach ($extensionList as $extensionDescriptor) {
+            if (isset($extensionDescriptor['source']) && $extensionDescriptor['source'] == 'iana') {
+                // Prefer IANA if any
+                $extensionsFromIana[] = $extension;
+                return $extensionDescriptor;
             }
         }
-
-        $this->byExtension = $extensions;
-        $logger->debug(count($extensions) . " MIME extensions loaded");
+        // Whatever...
+        $extensionsWhatever[] = $extension;
+        return array_pop($extensionList);
     }
 
     /**
@@ -93,7 +107,8 @@ class MimeDb
      * @param string $extension
      * @return array|null
      */
-    public function getFromExtension(string $extension) {
+    public function getFromExtension(string $extension)
+    {
         if (empty($extension)) {
             return null;
         }
