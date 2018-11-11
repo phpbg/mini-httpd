@@ -4,164 +4,9 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "765b4abd1b980704d7bf977fdb9458a8",
-    "content-hash": "4f4098df1a6d16c1a84b6724b0909288",
+    "hash": "5d3825f834c672ba8f31872e72ab11c8",
+    "content-hash": "5f0da8ab34ef099bae3cf8194a026830",
     "packages": [
-        {
-            "name": "christoph-kluge/reactphp-http-response-compression-middleware",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/christoph-kluge/reactphp-http-response-compression-middleware.git",
-                "reference": "5abae54b6d333ab47216cf1e8b282d07620799b4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/christoph-kluge/reactphp-http-response-compression-middleware/zipball/5abae54b6d333ab47216cf1e8b282d07620799b4",
-                "reference": "5abae54b6d333ab47216cf1e8b282d07620799b4",
-                "shasum": ""
-            },
-            "require": {
-                "clue/zlib-react": "^0.2",
-                "php": ">=5.6.0",
-                "psr/http-message": "^1.0",
-                "react/promise": "^2.5"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.8.10||^5.0",
-                "react/http": "dev-master",
-                "ringcentral/psr7": "^1.2"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Sikei\\React\\Http\\Middleware\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Christoph Kluge",
-                    "email": "work@christoph-kluge.eu"
-                }
-            ],
-            "description": "A response compression middleware for the ReactPHP HTTP-Server",
-            "time": "2017-10-24 09:44:47"
-        },
-        {
-            "name": "clue/stream-filter",
-            "version": "v1.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/clue/php-stream-filter.git",
-                "reference": "d80fdee9b3a7e0d16fc330a22f41f3ad0eeb09d0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/clue/php-stream-filter/zipball/d80fdee9b3a7e0d16fc330a22f41f3ad0eeb09d0",
-                "reference": "d80fdee9b3a7e0d16fc330a22f41f3ad0eeb09d0",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^5.0 || ^4.8"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Clue\\StreamFilter\\": "src/"
-                },
-                "files": [
-                    "src/functions.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Christian Lück",
-                    "email": "christian@lueck.tv"
-                }
-            ],
-            "description": "A simple and modern approach to stream filtering in PHP",
-            "homepage": "https://github.com/clue/php-stream-filter",
-            "keywords": [
-                "bucket brigade",
-                "callback",
-                "filter",
-                "php_user_filter",
-                "stream",
-                "stream_filter_append",
-                "stream_filter_register"
-            ],
-            "time": "2017-08-18 09:54:01"
-        },
-        {
-            "name": "clue/zlib-react",
-            "version": "v0.2.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/clue/reactphp-zlib.git",
-                "reference": "a33294df35a29234a8f88336a568cca963bfab82"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/clue/reactphp-zlib/zipball/a33294df35a29234a8f88336a568cca963bfab82",
-                "reference": "a33294df35a29234a8f88336a568cca963bfab82",
-                "shasum": ""
-            },
-            "require": {
-                "clue/stream-filter": "~1.3",
-                "php": ">=5.3",
-                "react/stream": "^1.0 || ^0.7 || ^0.6"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^5.0 || ^4.8",
-                "react/event-loop": "^1.0 || ^0.5 || ^0.4 || ^0.3"
-            },
-            "suggest": {
-                "ext-zlib": "Requires ext-zlib extension"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Clue\\React\\Zlib\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Christian Lück",
-                    "email": "christian@lueck.tv"
-                }
-            ],
-            "description": "Streaming zlib compressor and decompressor for ReactPHP, supporting compression and decompression of ZLIB format, raw DEFLATE format and GZIP format (RFC 1950, RFC 1951 and RFC 1952).",
-            "homepage": "https://github.com/clue/reactphp-zlib",
-            "keywords": [
-                "RFC 1950",
-                "RFC 1951",
-                "RFC 1952",
-                "compression",
-                "decompression",
-                "deflate",
-                "gz",
-                "gzip",
-                "inflate",
-                "reactphp",
-                "zlib"
-            ],
-            "time": "2018-05-11 12:05:21"
-        },
         {
             "name": "container-interop/container-interop",
             "version": "1.2.0",
@@ -1028,9 +873,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "christoph-kluge/reactphp-http-response-compression-middleware": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

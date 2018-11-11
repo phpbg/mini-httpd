@@ -1,5 +1,7 @@
 <?php
 
+ini_set('memory_limit', '64M');
+
 require __DIR__ . '/../vendor/autoload.php';
 
 // Manual requires for demo purpose.
@@ -60,10 +62,7 @@ $server = new \React\Http\Server([
     new \PhpBg\MiniHttpd\Middleware\UriPath(),
 
     // Compress compressible responses
-    new \PhpBg\MiniHttpd\Middleware\ResponseCompressionMiddleware([
-        new \Sikei\React\Http\Middleware\CompressionGzipHandler(new \Sikei\React\Http\Middleware\Detector\ArrayDetector($mimeDb->getCompressible())),
-        new \Sikei\React\Http\Middleware\CompressionDeflateHandler(new \Sikei\React\Http\Middleware\Detector\ArrayDetector($mimeDb->getCompressible())),
-    ]),
+    new \PhpBg\MiniHttpd\Middleware\GzipResponse($mimeDb->getCompressible()),
 
     // Serve static files
     new \PhpBg\MiniHttpd\Middleware\StaticContent($applicationContext->publicPath, $applicationContext->logger),
