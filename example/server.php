@@ -61,6 +61,9 @@ $server = new \React\Http\Server([
     // Decode once uri path
     new \PhpBg\MiniHttpd\Middleware\UriPath(),
 
+    // Convert (some) PSR-7 bodies to react streams
+    new \PhpBg\MiniHttpd\Middleware\ResponseBodyToReactStream(),
+
     // Compress compressible responses
     new \PhpBg\MiniHttpd\Middleware\GzipResponse($mimeDb->getCompressible()),
 
