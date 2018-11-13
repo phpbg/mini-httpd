@@ -24,39 +24,24 @@
  * SOFTWARE.
  */
 
-namespace PhpBg\MiniHttpd\Renderer;
+namespace PhpBg\MiniHttpd\Tests\Mocks;
 
-use PhpBg\MiniHttpd\HttpException\HttpException;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use function GuzzleHttp\Psr7\stream_for;
+use RingCentral\Psr7\Response;
 
 /**
- * JSON Renderer
+ * This middleware just return a PSR7 Response with the same body and content type as the request, and can help testing other middlewares
  */
-class Json implements RendererInterface
+class StringResponseMiddleware
 {
-    public function render(ServerRequestInterface $request, ResponseInterface $response, array $options, $data): ResponseInterface
+    public function __invoke(ServerRequestInterface $request)
     {
-        $response = $response->withHeader('Content-Type', 'application/json');
-        $response = $response->withBody(stream_for(json_encode($data)));
-        return $response;
-    }
-
-    public function renderException(ServerRequestInterface $request, ResponseInterface $response, array $options, \Exception $exception): ResponseInterface
-    {
-        $response = $response->withHeader('Content-Type', 'application/json');
-        if ($exception instanceof HttpException) {
-            $response = $response->withStatus($exception->httpStatus);
-            $data = [
-                'message' => $exception->getMessage(),
-                'details' => $exception->data
-            ];
-            $response = $response->withBody(stream_for(json_encode($data)));
-        } else {
-            $response = $response->withStatus(500);
+        $contentType = $request->getHeaderLine('Content-Type');
+        if (empty($contentType)) {
+            throw new \Exception("You must set a content-type header in your request to use this middleware");
         }
-
-        return $response;
+        $body = $request->getBody();
+        $body->rewind();
+        return new Response(200, ['Content-Type' => $contentType], $body);
     }
 }

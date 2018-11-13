@@ -31,7 +31,7 @@ use PhpBg\MiniHttpd\Middleware\ContextTrait;
 use PhpBg\MiniHttpd\Renderer\RendererInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use function RingCentral\Psr7\stream_for;
+use function GuzzleHttp\Psr7\stream_for;
 
 /**
  * HTML Renderer, based on phtml templates
