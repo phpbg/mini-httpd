@@ -26,9 +26,7 @@
 
 namespace PhpBg\MiniHttpd\Middleware;
 
-use PhpBg\MiniHttpd\MimeDb\MimeDb;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Log\LoggerInterface;
 
 /**
  * Serve static files
@@ -44,15 +42,16 @@ class StaticContent
     protected $publicPath;
 
     /**
-     * @var MimeDb
+     * @see StaticContent::__construct()
+     * @var array
      */
-    protected $mimeDb;
+    protected $mimeNamesByExtension;
 
     /**
      * @param string $publicPath Full path to the directory that contain files to serve. Ex: /var/www/public
-     * @param LoggerInterface $logger
+     * @param array $mimeNamesByExtension array of mimes names, by (unique) extension. E.g. ['html' => 'application/html']
      */
-    public function __construct(string $publicPath, LoggerInterface $logger)
+    public function __construct(string $publicPath, array $mimeNamesByExtension)
     {
         if (!is_dir($publicPath)) {
             throw new \RuntimeException();
@@ -62,7 +61,7 @@ class StaticContent
             throw new \RuntimeException();
         }
         $this->publicPath = $publicPath;
-        $this->mimeDb = new MimeDb($logger);
+        $this->mimeNamesByExtension = $mimeNamesByExtension;
     }
 
     public function __invoke(ServerRequestInterface $request, callable $next = null)
@@ -77,9 +76,9 @@ class StaticContent
             $headers = [
                 'Cache-Control' => 'public, max-age=31536000' //1 year of cache, make sure you change URLs when changing resources
             ];
-            $mime = $this->mimeDb->getFromExtension($extension);
+            $mime = $this->mimeNamesByExtension[$extension] ?? null;
             if ($mime !== null) {
-                $headers['Content-Type'] = $mime['name'];
+                $headers['Content-Type'] = $mime;
             }
             return new \React\Http\Response(
                 200,

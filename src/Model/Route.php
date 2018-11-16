@@ -51,7 +51,7 @@ class Route
      *     - anything renderable (probably array or stdClass object)
      * @param RendererInterface|null $renderer A renderer, if different from default renderer
      */
-    public function __construct(callable $handler, RendererInterface $renderer)
+    public function __construct(callable $handler, RendererInterface $renderer = null)
     {
         $this->handler = $handler;
         $this->renderer = $renderer;

@@ -26,6 +26,11 @@ new Vue({
             }
         });
 
+        // Global ajax start
+        $(document).ajaxStart(function() {
+            app.ajaxError = null;
+        });
+
         $.ajax({
             url: app.apiUrl + "/task/get",
         }).done(function(tasks) {

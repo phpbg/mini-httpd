@@ -26,9 +26,14 @@
 
 namespace PhpBg\MiniHttpd\Model;
 
+use PhpBg\MiniHttpd\Renderer\RendererInterface;
 use Psr\Log\LoggerInterface;
 use React\EventLoop\LoopInterface;
 
+/**
+ * Common ApplicationContext shared across everybody
+ * Public fields are not guaranteed to be initialized so please make your checks when accessing them
+ */
 class ApplicationContext
 {
     /**
@@ -58,4 +63,9 @@ class ApplicationContext
      * @var LoggerInterface
      */
     public $logger;
+
+    /**
+     * @var RendererInterface
+     */
+    public $defaultRenderer;
 }

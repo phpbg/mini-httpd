@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -29,10 +30,12 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class MimeDb
- * Provide mime info based on a file extension
- * File extensions having multiple mime types will be ignored
+ * Provide mime info:
+ *   * mime names
+ *   * file extensions
+ *   * compressible mimes
  *
- * Inspired from https://github.com/narrowspark/mimetypes and unsing https://github.com/jshttp/mime-db
+ * Based on https://github.com/jshttp/mime-db
  */
 class MimeDb
 {
@@ -40,6 +43,11 @@ class MimeDb
 
     protected $byName;
 
+    /**
+     * MimeDb constructor.
+     * @param LoggerInterface $logger
+     * @throws MimeDbException
+     */
     public function __construct(LoggerInterface $logger)
     {
         $dbFile = __DIR__ . '/db.json';
@@ -73,9 +81,10 @@ class MimeDb
         $extensionsWhatever = [];
         $this->byExtension = [];
         foreach ($extensions as $extension => $extensionList) {
-            $this->byExtension[$extension] = $this->selectExtensionDescriptor($extension, $extensionList, $extensionsFromIana, $extensionsWhatever);
+            $selectedDescriptor = $this->selectExtensionDescriptor($extension, $extensionList, $extensionsFromIana, $extensionsWhatever);
+            $this->byExtension[$extension] = $selectedDescriptor['name'];
         };
-        $logger->debug("MIME extensions",$extensions);
+        $logger->debug("MIME extensions", $extensions);
         $logger->info("MIME: " . count($extensions) . " extensions loaded");
         $logger->debug("MIME: following extensions have duplicates resolved with IANA flavor", $extensionsFromIana);
         $logger->debug("MIME: following extensions have duplicates resolved randomly", $extensionsWhatever);
@@ -100,27 +109,24 @@ class MimeDb
     }
 
     /**
-     * Return mime descriptor by file extension.
-     * Mime descriptor is an array containing:
-     *   - name: string: mime type name (aka "content type" in HTTP context). Eg application/json
-     *   - other data described here: https://github.com/jshttp/mime-db
+     * Return mime names by extension
+     * E.g. ['html' => 'application/html', ...]
+     * File extensions having multiple mime types will be resolved with IANA priority.
+     * Duplicates are logged at init, check your logs
      *
-     * @param string $extension
-     * @return array|null
+     * @return array
      */
-    public function getFromExtension(string $extension)
+    public function getNamesByExtension(): array
     {
-        if (empty($extension)) {
-            return null;
-        }
-        return $this->byExtension[$extension] ?? null;
+        return $this->byExtension;
     }
 
     /**
      * Return compressible mime names
      * @return array
      */
-    public function getCompressible():array {
+    public function getCompressible(): array
+    {
         $compressible = [];
         foreach ($this->byName as $name => $descriptor) {
             if (isset($descriptor['compressible']) && $descriptor['compressible']) {

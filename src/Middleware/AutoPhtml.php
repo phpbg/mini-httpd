@@ -42,7 +42,8 @@ class AutoPhtml
     {
         $result = $next($request);
         $context = $this->getContext($request);
-        if ($context->route->renderer instanceof Phtml && is_object($context->route->handler)) {
+        $renderer = $context->getRenderer();
+        if ($renderer instanceof Phtml && is_object($context->route->handler)) {
             $rc = new \ReflectionClass(get_class($context->route->handler));
             $controllerFilePath = $rc->getFileName();
             $controllerFilePathinfo = pathinfo($controllerFilePath);

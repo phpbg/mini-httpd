@@ -73,7 +73,8 @@ class Render
                         return $result;
                     }
                     $response = $context->getResponse();
-                    return $context->route->renderer->render($request, $response, $context->renderOptions, $result);
+                    $renderer = $this->getRenderer($request);
+                    return $renderer->render($request, $response, $context->renderOptions, $result);
                 },
                 function (\Exception $e) use ($request) {
                     return $this->doRenderException($request, $e);
@@ -84,7 +85,13 @@ class Render
         }
     }
 
-    protected function doRenderException(ServerRequestInterface $request, \Exception $e)
+    /**
+     * Render exceptions
+     * @param ServerRequestInterface $request
+     * @param \Exception $e
+     * @return ResponseInterface
+     */
+    protected function doRenderException(ServerRequestInterface $request, \Exception $e): ResponseInterface
     {
         if ($e instanceof RedirectException) {
             $response = $this->getContext($request)->getResponse();
@@ -101,7 +108,6 @@ class Render
 
     /**
      * Return renderer instance to use
-     *
      * Override this if you want another strategy, based for example on request "Accept" header
      *
      * @param ServerRequestInterface $request
@@ -109,13 +115,7 @@ class Render
      */
     protected function getRenderer(ServerRequestInterface $request): RendererInterface
     {
-        // Use route renderer if any
         $context = $this->getContext($request);
-        if (isset($context->route->renderer)) {
-            return $context->route->renderer;
-        }
-
-        // Otherwise use default renderer
-        return $this->defaultRenderer;
+        return $context->getRenderer();
     }
 }

@@ -26,6 +26,7 @@
 
 namespace PhpBg\MiniHttpd\Model;
 
+use PhpBg\MiniHttpd\Renderer\RendererInterface;
 use Psr\Http\Message\ResponseInterface;
 use React\Http\Response;
 
@@ -93,5 +94,21 @@ class RequestContext
     {
         $this->response = $response;
         return $this->response;
+    }
+
+    /**
+     * Return renderer instance to use
+     *
+     * @return RendererInterface
+     */
+    public function getRenderer(): RendererInterface
+    {
+        // Use route renderer if any
+        if (isset($this->route->renderer)) {
+            return $this->route->renderer;
+        }
+
+        // Otherwise use default renderer
+        return $this->applicationContext->defaultRenderer;
     }
 }
