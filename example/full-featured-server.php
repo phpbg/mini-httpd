@@ -28,6 +28,11 @@ $routes = [
     // Controller callback, with request manipulation, that return a promise
     '/api/task/add-async' => new \PhpBg\MiniHttpd\Model\Route([$taskController, 'addAsync'], $jsonRenderer),
 
+    // This is the suggested example for all your PHTML pages
+    // It consists of
+    //  * Demo.php: a PHP controller that will handle the request
+    //  * Demo.phtml: a file that will receive controller data and generate a response
+    //  * optional Demo.css and Demo.js files that will be inlined with the response
     '/demo' => new \PhpBg\MiniHttpd\Model\Route(new Demo(), new \PhpBg\MiniHttpd\Renderer\Phtml\Phtml(__DIR__ . '/pages/layout.phtml')),
 ];
 

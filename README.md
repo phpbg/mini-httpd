@@ -19,8 +19,13 @@ Most of features are directly inherited from [PHP React HTTP](https://github.com
 * Basic routing
 * Basic [PSR-3 logging](https://www.php-fig.org/psr/psr-3/)
 * Static files serving
-* Focus on **returning** data, not **building response to render** data
-  * Route handlers can return simple array or objects
+* Let you focus on **your service logic**, not **building a HTTP response** (boooring)
+  * Just return `arrays` or `objects` in your route handlers, that's it:
+  ```php
+  function (ServerRequestInterface $request) {
+      return ['hello' => 'world'];
+  }
+  ```
 
 ## Install
 Install with [composer](https://getcomposer.org/):
@@ -29,8 +34,13 @@ composer require phpbg/mini-httpd
 ```
 
 ## Examples
-See `example` folder for a complete demo.
+See `example` folder
+* `bare-minimal-json-server.php` shows the very minimal setup for json rendering
+* `full-featured-server.php` shows a full setup with:
+  * Static files serving
+  * Route redirection examples
+  * Automatic PHTML renderer features and suggested layout
+  * Accessing request params with proper validation / filtering
 
 ## TODO
 * writing tests
-* writing at least one HTML renderer
