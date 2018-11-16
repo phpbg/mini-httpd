@@ -34,7 +34,7 @@ use React\Stream\Util;
 use React\Stream\WritableStreamInterface;
 
 /**
- * Class ReadeableStreamProxy
+ * Class ReadableStreamProxy
  * Proxies a PSR-7 Stream to make it look like \React\Stream\ReadableStreamInterface
  *
  * PSR-7 Streams and ReadableStreamInterface are of quite different nature, so don't expect a miracle here.
@@ -44,7 +44,7 @@ use React\Stream\WritableStreamInterface;
  *     * it reaches eof
  *     * you explicitely call pause() or close()
  */
-class ReadeableStreamProxy extends EventEmitter implements ReadableStreamInterface
+class ReadableStreamProxy extends EventEmitter implements ReadableStreamInterface
 {
     protected $psr7stream;
 

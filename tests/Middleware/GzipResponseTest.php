@@ -93,8 +93,12 @@ class GzipResponseTest extends TestCase
             }
         }
         $this->checkGzip($gzippedContent);
-        file_put_contents(__DIR__ . '/test.gz', $gzippedContent);
+        $testFile = __DIR__ . '/test.gz';
+        @unlink($testFile);
+        $this->assertFalse(file_exists($testFile));
+        file_put_contents($testFile, $gzippedContent);
         $this->assertSame($body10k, gzdecode($gzippedContent));
+        @unlink($testFile);
     }
 
     public function CompressChunkedProvider()
@@ -204,7 +208,7 @@ class GzipResponseTest extends TestCase
         $this->assertSame(strlen($data), $stream->getSize());
         $this->assertSame($data, $stream->read(strlen($data) + 1));
         $this->assertSame(strlen($data), $stream->tell());
-        $this->assertTrue($stream->eof());
+        $this->assertTrue($stream->eof(), "Your PHP version is affected by https://bugs.php.net/bug.php?id=77146");
     }
 
     public function StreamReadEofProvider()
@@ -228,6 +232,6 @@ class GzipResponseTest extends TestCase
         fseek($stream, 0);
         $this->assertSame($data, fread($stream, 10));
         $this->assertSame(strlen($data), ftell($stream));
-        $this->assertTrue(feof($stream));
+        $this->assertTrue(feof($stream), "Your PHP version is affected by https://bugs.php.net/bug.php?id=77146");
     }
 }

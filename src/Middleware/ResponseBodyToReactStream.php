@@ -27,7 +27,7 @@
 namespace PhpBg\MiniHttpd\Middleware;
 
 use PhpBg\MiniHttpd\Model\ReactResponse;
-use PhpBg\MiniHttpd\ReactStream\ReadeableStreamProxy;
+use PhpBg\MiniHttpd\ReactStream\ReadableStreamProxy;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
@@ -89,7 +89,7 @@ class ResponseBodyToReactStream
                 return $response;
             }
 
-            return new ReactResponse($response, new ReadeableStreamProxy($response->getBody()));
+            return new ReactResponse($response, new ReadableStreamProxy($response->getBody()));
         });
     }
 }
