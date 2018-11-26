@@ -42,5 +42,7 @@ See `example` folder
   * Automatic PHTML renderer features and suggested layout
   * Accessing request params with proper validation / filtering
 
+There is also a complete example that integrates with ratchet Websockets here: https://github.com/phpbg/mini-httpd-ratchet
+
 ## TODO
 * writing tests

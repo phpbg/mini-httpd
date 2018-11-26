@@ -31,7 +31,8 @@
     "phpunit/phpunit": "^6.5"
   },
   "suggest": {
-    "wyrihaximus/react-http-middleware-session": "session handling"
+    "wyrihaximus/react-http-middleware-session": "session handling",
+    "cboden/ratchet": "Websocket server"
   },
   "autoload": {
     "psr-4": {
