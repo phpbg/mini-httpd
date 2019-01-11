@@ -45,13 +45,13 @@ use React\Http\Server;
 class ServerFactory
 {
     /**
-     * Creates a default, full featured, application stack
+     * Create default stack handler
      *
      * @param ApplicationContext $applicationContext
-     * @return Server
+     * @return array
      * @throws MimeDbException
      */
-    public static function create(ApplicationContext $applicationContext): Server
+    public static function createDefaultStack(ApplicationContext $applicationContext): array
     {
         if (! isset($applicationContext->logger)) {
             throw new \RuntimeException("A logger is required in your application context");
@@ -97,6 +97,20 @@ class ServerFactory
 
         // Run route selected
         $middlewares[] = new Run();
+
+        return $middlewares;
+    }
+
+    /**
+     * Creates a default, full featured, application stack
+     *
+     * @param ApplicationContext $applicationContext
+     * @return Server
+     * @throws MimeDbException
+     */
+    public static function create(ApplicationContext $applicationContext): Server
+    {
+        $middlewares = static::createDefaultStack($applicationContext);
         $server = new Server($middlewares);
 
         // Log server errors
