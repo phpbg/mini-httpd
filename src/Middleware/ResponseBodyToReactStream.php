@@ -31,6 +31,7 @@ use PhpBg\MiniHttpd\ReactStream\ReadableStreamProxy;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
+use React\EventLoop\LoopInterface;
 use React\Promise\FulfilledPromise;
 use React\Promise\PromiseInterface;
 
@@ -54,12 +55,14 @@ use React\Promise\PromiseInterface;
 class ResponseBodyToReactStream
 {
     protected $minSizeConvert;
+    protected $loop;
 
     /**
      * @param int $minSizeConvert Don't convert streams that have a too small size because there's no benefit for doing it
      */
-    public function __construct(int $minSizeConvert = 65535)
+    public function __construct(LoopInterface $loop, int $minSizeConvert = 65535)
     {
+        $this->loop = $loop;
         $this->minSizeConvert = $minSizeConvert;
     }
 
@@ -89,7 +92,13 @@ class ResponseBodyToReactStream
                 return $response;
             }
 
-            return new ReactResponse($response, new ReadableStreamProxy($response->getBody()));
+            $proxy = new ReadableStreamProxy($response->getBody());
+            $this->loop->futureTick(function() use ($proxy) {
+                // Delay emitting data to let \React\Http\StreamingServer::handleResponse() pipe the stream to the connection properly
+                $proxy->resume();
+            });
+
+            return new ReactResponse($response, $proxy);
         });
     }
 }

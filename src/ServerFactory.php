@@ -68,7 +68,7 @@ class ServerFactory
         $middlewares[] = new UriPath();
 
         // Convert (some) PSR-7 bodies to react streams
-        $middlewares[] = new ResponseBodyToReactStream();
+        $middlewares[] = new ResponseBodyToReactStream($applicationContext->loop);
 
         // Compress compressible responses
         $middlewares[] = new GzipResponse($mimeDb->getCompressible());

@@ -84,9 +84,7 @@ class ReadableStreamProxy extends EventEmitter implements ReadableStreamInterfac
 
     public function pipe(WritableStreamInterface $dest, array $options = array())
     {
-        $dest = Util::pipe($this, $dest, $options);
-        $this->resume();
-        return $dest;
+        return Util::pipe($this, $dest, $options);
     }
 
     public function resume()

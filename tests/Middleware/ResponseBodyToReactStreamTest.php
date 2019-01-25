@@ -39,8 +39,9 @@ class ResponseBodyToReactStreamTest extends TestCase
 {
     public function testShouldBeConverted()
     {
+        $loop = \React\EventLoop\Factory::create();
         $minSize = 100;
-        $responseBodyToReactStreamMiddleware = new ResponseBodyToReactStream($minSize);
+        $responseBodyToReactStreamMiddleware = new ResponseBodyToReactStream($loop, $minSize);
         $body = str_repeat('0', $minSize + 1);
         $request = new ServerRequest('GET', '/foo', ['Content-Type' => 'text/plain'], $body);
 
@@ -73,8 +74,9 @@ class ResponseBodyToReactStreamTest extends TestCase
 
     public function testShouldNotBeConverted()
     {
+        $loop = \React\EventLoop\Factory::create();
         $minSize = 100;
-        $responseBodyToReactStreamMiddleware = new ResponseBodyToReactStream($minSize);
+        $responseBodyToReactStreamMiddleware = new ResponseBodyToReactStream($loop, $minSize);
         $body = str_repeat('0', $minSize - 1);
         $request = new ServerRequest('GET', '/foo', ['Content-Type' => 'text/plain'], $body);
 

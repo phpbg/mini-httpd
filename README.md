@@ -46,6 +46,3 @@ There is also a complete example that integrates with ratchet Websockets here: h
 
 ## TODO
 * writing tests
-
-## Notes
-react/http is locked to 0.8.3 due to https://github.com/reactphp/http/issues/332
