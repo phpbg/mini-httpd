@@ -116,6 +116,7 @@ class Render
     protected function getRenderer(ServerRequestInterface $request): RendererInterface
     {
         $context = $this->getContext($request);
-        return $context->getRenderer();
+        $renderer = $context->getRenderer();
+        return $renderer ?? $this->defaultRenderer;
     }
 }

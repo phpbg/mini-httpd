@@ -42,12 +42,6 @@ class ApplicationContext
     public $loop;
 
     /**
-     * This is where you can put your application configuration
-     * @var mixed
-     */
-    public $options;
-
-    /**
      * Array of <uri paths> => <Route>
      * @var Route[]
      */
@@ -58,6 +52,12 @@ class ApplicationContext
      * @var string
      */
     public $publicPath;
+
+    /**
+     * Root path of the application
+     * @var string
+     */
+    public $rootPath;
 
     /**
      * @var LoggerInterface

@@ -10,7 +10,7 @@ require __DIR__ . '/pages/Demo.php';
 
 $loop = React\EventLoop\Factory::create();
 $jsonRenderer = new \PhpBg\MiniHttpd\Renderer\Json();
-$taskController = new Tasks();
+$taskController = new Tasks($loop);
 $routes = [
     // Redirection example
     '/' => new \PhpBg\MiniHttpd\Model\Route(function () {
@@ -43,8 +43,6 @@ $applicationContext = new \PhpBg\MiniHttpd\Model\ApplicationContext();
 // You may require loop for async tasks
 $applicationContext->loop = $loop;
 
-// You can put your configuration directives in options
-$applicationContext->options = [];
 $applicationContext->routes = $routes;
 
 // Public path is where static files are served from (optional)

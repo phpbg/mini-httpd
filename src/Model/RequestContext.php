@@ -36,11 +36,6 @@ use React\Http\Response;
 class RequestContext
 {
     /**
-     * @var ApplicationContext
-     */
-    public $applicationContext;
-
-    /**
      * @var ResponseInterface
      */
     protected $response;
@@ -66,11 +61,6 @@ class RequestContext
      * @var array
      */
     public $renderOptions = [];
-
-    public function __construct(ApplicationContext $context)
-    {
-        $this->applicationContext = $context;
-    }
 
     /**
      * Return the response that will be returned
@@ -99,16 +89,10 @@ class RequestContext
     /**
      * Return renderer instance to use
      *
-     * @return RendererInterface
+     * @return RendererInterface | null
      */
-    public function getRenderer(): RendererInterface
+    public function getRenderer()
     {
-        // Use route renderer if any
-        if (isset($this->route->renderer)) {
-            return $this->route->renderer;
-        }
-
-        // Otherwise use default renderer
-        return $this->applicationContext->defaultRenderer;
+        return $this->route->renderer ?? null;
     }
 }

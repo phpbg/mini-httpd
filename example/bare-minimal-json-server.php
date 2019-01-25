@@ -9,6 +9,7 @@ $loop = React\EventLoop\Factory::create();
 // Application context will be accessible everywhere
 // @See \PhpBg\MiniHttpd\Middleware\ContextTrait to retrieve it easily
 $applicationContext = new \PhpBg\MiniHttpd\Model\ApplicationContext();
+$applicationContext->loop = $loop;
 
 // Default renderer
 $applicationContext->defaultRenderer = new \PhpBg\MiniHttpd\Renderer\Json();

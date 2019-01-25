@@ -43,36 +43,43 @@ class AutoPhtml
         $result = $next($request);
         $context = $this->getContext($request);
         $renderer = $context->getRenderer();
-        if ($renderer instanceof Phtml && is_object($context->route->handler)) {
-            $rc = new \ReflectionClass(get_class($context->route->handler));
-            $controllerFilePath = $rc->getFileName();
-            $controllerFilePathinfo = pathinfo($controllerFilePath);
+        if (! isset($renderer)) {
+            return $result;
+        }
+        if (! $renderer instanceof Phtml) {
+            return $result;
+        }
+        if (! is_object($context->route->handler)) {
+            return $result;
+        }
+        $rc = new \ReflectionClass(get_class($context->route->handler));
+        $controllerFilePath = $rc->getFileName();
+        $controllerFilePathinfo = pathinfo($controllerFilePath);
 
-            // PHTML view file
-            $phtmlFile = "{$controllerFilePathinfo['dirname']}/{$controllerFilePathinfo['filename']}.phtml";
-            if (!array_key_exists('viewFilePath', $context->renderOptions)) {
-                $context->renderOptions['viewFilePath'] = $phtmlFile;
-            }
+        // PHTML view file
+        $phtmlFile = "{$controllerFilePathinfo['dirname']}/{$controllerFilePathinfo['filename']}.phtml";
+        if (!array_key_exists('viewFilePath', $context->renderOptions)) {
+            $context->renderOptions['viewFilePath'] = $phtmlFile;
+        }
 
-            // JS file
-            $jsFile = "{$controllerFilePathinfo['dirname']}/{$controllerFilePathinfo['filename']}.js";
-            if (!isset($context->renderOptions['inlineScripts'])) {
-                $context->renderOptions['inlineScripts'] = [];
-            }
-            if (is_file($jsFile)) {
-                //TODO async file get contents?
-                $context->renderOptions['inlineScripts'][] = file_get_contents($jsFile);
-            }
+        // JS file
+        $jsFile = "{$controllerFilePathinfo['dirname']}/{$controllerFilePathinfo['filename']}.js";
+        if (!isset($context->renderOptions['inlineScripts'])) {
+            $context->renderOptions['inlineScripts'] = [];
+        }
+        if (is_file($jsFile)) {
+            //TODO async file get contents?
+            $context->renderOptions['inlineScripts'][] = file_get_contents($jsFile);
+        }
 
-            // CSS file
-            $cssFile = "{$controllerFilePathinfo['dirname']}/{$controllerFilePathinfo['filename']}.css";
-            if (!isset($context->renderOptions['inlineCss'])) {
-                $context->renderOptions['inlineCss'] = [];
-            }
-            if (is_file($cssFile)) {
-                //TODO async file get contents?
-                $context->renderOptions['inlineCss'][] = file_get_contents($cssFile);
-            }
+        // CSS file
+        $cssFile = "{$controllerFilePathinfo['dirname']}/{$controllerFilePathinfo['filename']}.css";
+        if (!isset($context->renderOptions['inlineCss'])) {
+            $context->renderOptions['inlineCss'] = [];
+        }
+        if (is_file($cssFile)) {
+            //TODO async file get contents?
+            $context->renderOptions['inlineCss'][] = file_get_contents($cssFile);
         }
 
         return $result;

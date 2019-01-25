@@ -26,7 +26,6 @@
 
 namespace PhpBg\MiniHttpd\Middleware;
 
-use PhpBg\MiniHttpd\Model\ApplicationContext;
 use PhpBg\MiniHttpd\Model\RequestContext;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -39,17 +38,9 @@ class Context
 
     protected $applicationContext;
 
-    /**
-     * @param ApplicationContext $applicationContext
-     */
-    public function __construct(ApplicationContext $applicationContext)
-    {
-        $this->applicationContext = $applicationContext;
-    }
-
     public function __invoke(ServerRequestInterface $request, callable $next)
     {
-        $context = new RequestContext($this->applicationContext);
+        $context = new RequestContext();
         $request = $this->setContext($request, $context);
         return $next($request);
     }

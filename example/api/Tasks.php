@@ -3,12 +3,19 @@
 /**
  * This is a sample tasks management class.
  */
-class Tasks extends \PhpBg\MiniHttpd\Controller\AbstractController
+final class Tasks extends \PhpBg\MiniHttpd\Controller\AbstractController
 {
     use \PhpBg\MiniHttpd\Middleware\ContextTrait;
 
     // Initial tasks
     public $tasks = ['task1', 'task2'];
+
+    private $loop;
+
+    public function __construct(\React\EventLoop\LoopInterface $loop)
+    {
+        $this->loop = $loop;
+    }
 
     /**
      * Simple add task example
@@ -30,7 +37,7 @@ class Tasks extends \PhpBg\MiniHttpd\Controller\AbstractController
     public function addAsync(\Psr\Http\Message\ServerRequestInterface $request)
     {
         return new React\Promise\Promise(function($resolve, $reject) use ($request) {
-            $this->getContext($request)->applicationContext->loop->addTimer(2, function() use ($resolve, $reject, $request) {
+            $this->loop->addTimer(2, function() use ($resolve, $reject, $request) {
                 try {
                     $task = $this->getFromPost($request, 'task', null, new \Zend\Validator\NotEmpty());
                 } catch (\PhpBg\MiniHttpd\Model\ValidateException $e) {

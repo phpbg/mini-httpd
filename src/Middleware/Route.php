@@ -35,16 +35,22 @@ class Route
 {
     use ContextTrait;
 
+    protected $routes;
+
+    public function __construct(array $routes)
+    {
+        $this->routes = $routes;
+    }
+
     public function __invoke(ServerRequestInterface $request, callable $next)
     {
         $pathDecoded = $this->getContext($request)->uriPathDecoded;
-        $routes = $this->getContext($request)->applicationContext->routes;
-        if (isset($routes[$pathDecoded])) {
-            if (!$routes[$pathDecoded] instanceof \PhpBg\MiniHttpd\Model\Route) {
+        if (isset($this->routes[$pathDecoded])) {
+            if (!$this->routes[$pathDecoded] instanceof \PhpBg\MiniHttpd\Model\Route) {
                 throw new \RuntimeException("Route $pathDecoded does not extend " . \PhpBg\MiniHttpd\Model\Route::class);
             }
 
-            $this->getContext($request)->route = $routes[$pathDecoded];
+            $this->getContext($request)->route = $this->routes[$pathDecoded];
         }
 
         return $next($request);

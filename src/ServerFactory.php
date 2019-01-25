@@ -61,8 +61,8 @@ class ServerFactory
         // Log all incoming requests
         $middlewares[] = new LogRequest($applicationContext->logger);
 
-        // Make application context and request context available to all middlewares. Allow data exchanging between middlewares
-        $middlewares[] = new Context($applicationContext);
+        // Make request context available to all middlewares. Allow data exchanging between middlewares
+        $middlewares[] = new Context();
 
         // Decode once uri path
         $middlewares[] = new UriPath();
@@ -90,7 +90,7 @@ class ServerFactory
         $middlewares[] = new LogError($applicationContext->logger);
 
         // Calculate route to be run
-        $middlewares[] = new Route();
+        $middlewares[] = new Route($applicationContext->routes);
 
         // Auto render PHTML files
         $middlewares[] = new AutoPhtml();
