@@ -103,11 +103,11 @@ class Console extends AbstractLogger
 
     /**
      * Format an exception
-     * @param \Exception $e
+     * @param \Throwable $e
      * @param string $newLine Optionnal new line char
      * @return string
      */
-    protected function formatException(\Exception $e, $newLine = PHP_EOL)
+    protected function formatException(\Throwable $e, $newLine = PHP_EOL): string
     {
         $message = '';
 
@@ -130,11 +130,11 @@ class Console extends AbstractLogger
     /**
      * Format an exception as string
      *
-     * @param \Exception $e
+     * @param \Throwable $e
      * @param string $newLine
      * @return string
      */
-    protected function _formatException(\Exception $e, string $newLine = PHP_EOL): string
+    protected function _formatException(\Throwable $e, string $newLine = PHP_EOL): string
     {
         return get_class($e) . ': ' . $e->getMessage() . $newLine . '#> ' . $e->getFile() . '(' . $e->getLine() . ')' . $newLine . $e->getTraceAsString();
     }
