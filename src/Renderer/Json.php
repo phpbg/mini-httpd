@@ -39,7 +39,16 @@ class Json implements RendererInterface
     public function render(ServerRequestInterface $request, ResponseInterface $response, array $options, $data): ResponseInterface
     {
         $response = $response->withHeader('Content-Type', 'application/json');
-        $response = $response->withBody(stream_for(json_encode($data)));
+        $dataStr = json_encode($data);
+        if ($dataStr === false) {
+            // Check for JSON error
+            $err = json_last_error();
+            if ($err !== JSON_ERROR_NONE) {
+                $response = $response->withStatus(500);
+                $dataStr = "Error {$err}: " . json_last_error_msg();
+            }
+        }
+        $response = $response->withBody(stream_for($dataStr));
         return $response;
     }
 

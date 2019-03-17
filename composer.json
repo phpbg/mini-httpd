@@ -19,6 +19,7 @@
   "require": {
     "php": ">=7.0",
     "ext-zlib": "*",
+    "ext-json": "*",
     "react/http": "0.8.4",
     "zendframework/zend-validator": "^2.10",
     "zendframework/zend-filter": "^2.8",
