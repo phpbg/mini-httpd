@@ -36,10 +36,13 @@ use function GuzzleHttp\Psr7\stream_for;
  */
 class Json implements RendererInterface
 {
+    const JSON_OPTIONS_KEY = 'jsonOptions';
+
     public function render(ServerRequestInterface $request, ResponseInterface $response, array $options, $data): ResponseInterface
     {
         $response = $response->withHeader('Content-Type', 'application/json');
-        $dataStr = json_encode($data);
+        $opts = $options[static::JSON_OPTIONS_KEY] ?? 0;
+        $dataStr = json_encode($data, $opts);
         if ($dataStr === false) {
             // Check for JSON error
             $err = json_last_error();
@@ -61,7 +64,8 @@ class Json implements RendererInterface
                 'message' => $exception->getMessage(),
                 'details' => $exception->data
             ];
-            $response = $response->withBody(stream_for(json_encode($data)));
+            $opts = $options[static::JSON_OPTIONS_KEY] ?? 0;
+            $response = $response->withBody(stream_for(json_encode($data, $opts)));
         } else {
             $response = $response->withStatus(500);
         }

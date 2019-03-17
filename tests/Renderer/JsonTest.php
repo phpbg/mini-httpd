@@ -48,6 +48,20 @@ class JsonTest extends TestCase
         $this->assertSame('application/json', $response->getHeaderLine('Content-Type'));
     }
 
+    public function testRenderOKWithOpts()
+    {
+        $renderer = new Json();
+        $request = new ServerRequest('GET', '/');
+        $response = new Response();
+        $data = ['foo' => 'bar'];
+
+        $response = $renderer->render($request, $response, [Json::JSON_OPTIONS_KEY => JSON_PRETTY_PRINT], $data);
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame(json_encode($data, JSON_PRETTY_PRINT), $response->getBody()->getContents());
+        $this->assertSame('application/json', $response->getHeaderLine('Content-Type'));
+    }
+
     public function testRenderKO()
     {
         $renderer = new Json();
