@@ -27,12 +27,14 @@
 namespace PhpBg\MiniHttpd\Tests\Logger;
 
 use PhpBg\MiniHttpd\Logger\Console;
+use PhpBg\MiniHttpd\Logger\ConsoleFormatter;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
 
 class ConsoleTest extends TestCase
 {
-    public function testLogException() {
+    public function testLogException()
+    {
         $output = fopen('php://memory', 'w+');
         $logger = new Console(LogLevel::DEBUG, $output);
 
@@ -42,7 +44,8 @@ class ConsoleTest extends TestCase
         $this->assertNotEmpty(stream_get_contents($output));
     }
 
-    public function testLogExceptionWithPrevious() {
+    public function testLogExceptionWithPrevious()
+    {
         $output = fopen('php://memory', 'w+');
         $logger = new Console(LogLevel::DEBUG, $output);
 
@@ -52,7 +55,8 @@ class ConsoleTest extends TestCase
         $this->assertNotEmpty(stream_get_contents($output));
     }
 
-    public function testLogError() {
+    public function testLogError()
+    {
         $output = fopen('php://memory', 'w+');
         $logger = new Console(LogLevel::DEBUG, $output);
 
@@ -62,4 +66,56 @@ class ConsoleTest extends TestCase
         $this->assertNotEmpty(stream_get_contents($output));
     }
 
+    public function testLogContextNotJsonEncodable()
+    {
+        $output = fopen('php://memory', 'w+');
+        $logger = new Console(LogLevel::DEBUG, $output);
+
+        $logger->error("foo", ['bar' => \log(0)]);
+
+        rewind($output);
+        $msg = stream_get_contents($output);
+        $this->assertNotEmpty($msg);
+        $this->assertTrue(strpos($msg, 'could not log full context') !== false);
+    }
+
+    public function testLogStartWithDate()
+    {
+        $output = fopen('php://memory', 'w+');
+        $logger = new Console(LogLevel::DEBUG, $output);
+
+        $logger->error("foo");
+
+        rewind($output);
+        $msg = stream_get_contents($output);
+        $this->assertNotEmpty($msg);
+        $this->assertSame(1, preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2}/', $msg));
+    }
+
+    public function testLogContainLevel()
+    {
+        $output = fopen('php://memory', 'w+');
+        $logger = new Console(LogLevel::DEBUG, $output);
+
+        $logger->error("foo");
+
+        rewind($output);
+        $msg = stream_get_contents($output);
+        $this->assertNotEmpty($msg);
+        $this->assertTrue(strrpos($msg, LogLevel::ERROR) !== false);
+    }
+
+    public function testCustomFormatterWithoutDate()
+    {
+        $output = fopen('php://memory', 'w+');
+        $logger = new Console(LogLevel::DEBUG, $output, new ConsoleFormatter(false));
+
+        $logger->error("foo");
+
+        rewind($output);
+        $msg = stream_get_contents($output);
+        $this->assertNotEmpty($msg);
+        $this->assertTrue(strrpos($msg, LogLevel::ERROR) !== false);
+        $this->assertSame(0, preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2}/', $msg));
+    }
 }

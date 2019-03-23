@@ -49,7 +49,14 @@ class Console extends AbstractLogger
     private $formatter;
     private $handle;
 
-    //TODO use a WritableStreamInterface for output, see https://github.com/WyriHaximus/reactphp-psr-3-stdio/blob/master/src/StdioLogger.php
+    /**
+     * Console logger
+     * TODO use a WritableStreamInterface for output, see https://github.com/WyriHaximus/reactphp-psr-3-stdio/blob/master/src/StdioLogger.php
+     *
+     * @param string $minLevel
+     * @param string $output
+     * @param callable|null $formatter Callable that will receive string $level, string $message, array $context and must return a string without throwing
+     */
     public function __construct(string $minLevel = LogLevel::WARNING, $output = 'php://stderr', callable $formatter = null)
     {
         if (!isset(self::$levels[$minLevel])) {
@@ -57,7 +64,7 @@ class Console extends AbstractLogger
         }
 
         $this->minLevelIndex = self::$levels[$minLevel];
-        $this->formatter = $formatter ?: array($this, 'format');
+        $this->formatter = $formatter ?? new ConsoleFormatter();
         if (false === $this->handle = \is_resource($output) ? $output : @fopen($output, 'a')) {
             throw new InvalidArgumentException(sprintf('Unable to open "%s".', $output));
         }
@@ -80,62 +87,5 @@ class Console extends AbstractLogger
 
         //TODO use WritableStreamInterface
         fwrite($this->handle, $formatter($level, $message, $context));
-    }
-
-    private function format(string $level, string $message, array $context): string
-    {
-        $exception = null;
-        if (isset($context['exception'])) {
-            $exception = $context['exception'];
-            unset($context['exception']);
-        }
-
-        if (!empty($context)) {
-            $message .= ' ' . json_encode($context);
-        }
-
-        if (isset($exception)) {
-            $message .= ' ' . $this->formatException($exception);
-        }
-
-        return sprintf('%s [%s] %s', date(\DateTime::RFC3339), $level, $message) . \PHP_EOL;
-    }
-
-    /**
-     * Format an exception
-     * @param \Throwable $e
-     * @param string $newLine Optionnal new line char
-     * @return string
-     */
-    protected function formatException(\Throwable $e, $newLine = PHP_EOL): string
-    {
-        $message = '';
-
-        $currentException = $e;
-        while (true) {
-            if ($currentException === $e) {
-                $message .= $this->_formatException($currentException);
-            } else {
-                $message .= $newLine . 'Caused by: ' . $this->_formatException($currentException, $newLine);
-            }
-
-            $currentException = $currentException->getPrevious();
-            if (!isset($currentException)) {
-                break;
-            }
-        }
-        return $message;
-    }
-
-    /**
-     * Format an exception as string
-     *
-     * @param \Throwable $e
-     * @param string $newLine
-     * @return string
-     */
-    protected function _formatException(\Throwable $e, string $newLine = PHP_EOL): string
-    {
-        return get_class($e) . ': ' . $e->getMessage() . $newLine . '#> ' . $e->getFile() . '(' . $e->getLine() . ')' . $newLine . $e->getTraceAsString();
     }
 }
