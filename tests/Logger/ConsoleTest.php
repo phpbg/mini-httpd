@@ -44,6 +44,32 @@ class ConsoleTest extends TestCase
         $this->assertNotEmpty(stream_get_contents($output));
     }
 
+    public function testLogWithContext()
+    {
+        $output = fopen('php://memory', 'w+');
+        $logger = new Console(LogLevel::DEBUG, $output);
+
+        $logger->error("foo", ['bar' => 'baz']);
+
+        rewind($output);
+        $msg = stream_get_contents($output);
+        $this->assertNotEmpty($msg);
+        $this->assertFalse(strpos($msg, 'could not log full context'));
+    }
+
+    public function testLogWithContextNotJsonEncodable()
+    {
+        $output = fopen('php://memory', 'w+');
+        $logger = new Console(LogLevel::DEBUG, $output);
+
+        $logger->error("foo", ['bar' => \log(0)]);
+
+        rewind($output);
+        $msg = stream_get_contents($output);
+        $this->assertNotEmpty($msg);
+        $this->assertTrue(strpos($msg, 'could not log full context') !== false);
+    }
+
     public function testLogExceptionWithPrevious()
     {
         $output = fopen('php://memory', 'w+');

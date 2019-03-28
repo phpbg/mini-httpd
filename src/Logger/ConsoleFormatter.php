@@ -54,10 +54,16 @@ class ConsoleFormatter
         }
 
         if (!empty($context)) {
-            $message .= ' ' . \json_encode($context, JSON_PARTIAL_OUTPUT_ON_ERROR);
-            $jsonMsg = \json_last_error_msg();
-            if (!empty($jsonMsg)) {
-                $message .= "<could not log full context because of: {$jsonMsg}>";
+            $jsonMessage = \json_encode($context, JSON_PARTIAL_OUTPUT_ON_ERROR);
+            if (\json_last_error() !== JSON_ERROR_NONE) {
+                $jsonMsg = \json_last_error_msg();
+                if (!empty($jsonMsg)) {
+                    $message .= " <could not log full context because of: {$jsonMsg}>";
+                }
+            }
+            if ($jsonMessage !== false) {
+                // log even partial messages
+                $message .= ' ' . $jsonMessage;
             }
         }
 

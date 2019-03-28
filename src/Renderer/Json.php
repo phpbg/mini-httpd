@@ -45,6 +45,7 @@ class Json implements RendererInterface
         $dataStr = json_encode($data, $opts);
         if ($dataStr === false) {
             // Check for JSON error
+            // Note that $dataStr may be !== false even if an error occured, if using JSON_PARTIAL_OUTPUT_ON_ERROR
             $err = json_last_error();
             if ($err !== JSON_ERROR_NONE) {
                 $response = $response->withStatus(500);
