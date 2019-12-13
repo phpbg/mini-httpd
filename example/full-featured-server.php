@@ -11,6 +11,7 @@ require __DIR__ . '/pages/Demo.php';
 $loop = React\EventLoop\Factory::create();
 $jsonRenderer = new \PhpBg\MiniHttpd\Renderer\Json();
 $taskController = new Tasks($loop);
+$logger = new \PhpBg\MiniHttpd\Logger\Console(\Psr\Log\LogLevel::DEBUG);
 $routes = [
     // Redirection example
     '/' => new \PhpBg\MiniHttpd\Model\Route(function () {
@@ -33,7 +34,7 @@ $routes = [
     //  * Demo.php: a PHP controller that will handle the request
     //  * Demo.phtml: a file that will receive controller data and generate a response
     //  * optional Demo.css and Demo.js files that will be inlined with the response
-    '/demo' => new \PhpBg\MiniHttpd\Model\Route(new Demo(), new \PhpBg\MiniHttpd\Renderer\Phtml\Phtml(__DIR__ . '/pages/layout.phtml')),
+    '/demo' => new \PhpBg\MiniHttpd\Model\Route(new Demo(), new \PhpBg\MiniHttpd\Renderer\Phtml\Phtml(__DIR__ . '/pages/layout.phtml', $logger)),
 ];
 
 // Application context will be accessible everywhere
@@ -49,7 +50,7 @@ $applicationContext->routes = $routes;
 $applicationContext->publicPath = __DIR__ . '/public';
 
 // You can share your PSR3 logger here
-$applicationContext->logger = new \PhpBg\MiniHttpd\Logger\Console(\Psr\Log\LogLevel::DEBUG);
+$applicationContext->logger = $logger;
 
 $applicationContext->defaultRenderer = $jsonRenderer;
 

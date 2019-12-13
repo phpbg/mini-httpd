@@ -31,6 +31,7 @@ use PhpBg\MiniHttpd\Middleware\ContextTrait;
 use PhpBg\MiniHttpd\Renderer\RendererInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerInterface;
 use function GuzzleHttp\Psr7\stream_for;
 
 /**
@@ -42,9 +43,12 @@ class Phtml implements RendererInterface
 
     protected $defaultLayout;
 
-    public function __construct(string $defaultLayout = null)
+    protected $logger;
+
+    public function __construct(string $defaultLayout = null, LoggerInterface $logger = null)
     {
         $this->defaultLayout = $defaultLayout;
+        $this->logger = $logger;
     }
 
     /**
@@ -64,8 +68,10 @@ class Phtml implements RendererInterface
             $layoutFilePath = $options['layoutFilePath'] ?? $this->defaultLayout ?? null;
             $content = $this->getContent($data, $options, $viewFilePath, $layoutFilePath);
         } catch (\Exception $e) {
-            $this->getContext($request)->applicationContext->logger->warning("Unexpected rendering error", ['exception' => $e]);
-            return $this->renderException($request, $e);
+            if ($this->logger) {
+                $this->logger->warning('', ['exception' => $e]);
+            }
+            return $this->renderException($request, $response, $options, $e);
         }
 
         $response = $response->withHeader('Content-Type', 'text/html');
