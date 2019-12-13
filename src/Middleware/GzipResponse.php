@@ -140,6 +140,8 @@ class GzipResponse
                 return null;
             }
             $data = $body->read($chunkSize);
+            // We do test for false and null because we do not trust StreamInterface implementations
+            // e.g. some implementations rely on fread
             if ($data === false || $data === null || $data === '') {
                 return null;
             }
