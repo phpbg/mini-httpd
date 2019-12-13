@@ -54,7 +54,7 @@ trait ValidatedFiltered
         } else if (is_object($data)) {
             $value = property_exists($data, $key) ? $data->{$key} : $default;
         } else {
-            $value = $default;
+            throw new \InvalidArgumentException();
         }
 
         if (!empty($filter)) {
