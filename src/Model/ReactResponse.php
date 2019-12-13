@@ -35,7 +35,7 @@ use React\Stream\ReadableStreamInterface;
  *
  * @internal This is only to be used with react as it is not really legal...
  */
-class ReactResponse implements ResponseInterface
+final class ReactResponse implements ResponseInterface
 {
 
     protected $proxiedResponse;
