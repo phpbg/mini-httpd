@@ -76,7 +76,7 @@ class ResponseBodyToReactStream
             $result = new FulfilledPromise($result);
         }
 
-        return $result->then(function (ResponseInterface $response) use ($request) {
+        return $result->then(function (ResponseInterface $response) {
             // response has no content body (no need to compress anything)
             // or it is not worth compressing it
             if ($response->hasHeader('Content-Length') && intval($response->getHeaderLine('Content-Length')) <= $this->minSizeConvert) {
