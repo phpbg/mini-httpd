@@ -54,7 +54,7 @@ class Console extends AbstractLogger
      * TODO use a WritableStreamInterface for output, see https://github.com/WyriHaximus/reactphp-psr-3-stdio/blob/master/src/StdioLogger.php
      *
      * @param string $minLevel
-     * @param string $output
+     * @param string|resource $output
      * @param callable|null $formatter Callable that will receive string $level, string $message, array $context and must return a string without throwing
      */
     public function __construct(string $minLevel = LogLevel::WARNING, $output = 'php://stderr', callable $formatter = null)
