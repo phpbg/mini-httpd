@@ -32,8 +32,8 @@ class Template
     private $__data;
 
     /**
-     * @param $__filepath Full path to the phtml template file to render
-     * @param $data Data transmitted to view. These data will be accessible like object property on the view. It must be either an array or an object
+     * @param string $filepath Full path to the phtml template file to render
+     * @param mixed $data Data transmitted to view. These data will be accessible like object property on the view. It must be either an array or an object
      */
     public function __construct(string $filepath, $data = null)
     {
@@ -50,7 +50,7 @@ class Template
 
     /**
      * Return rendered content as string
-     * @throws Exception
+     * @throws PhtmlException
      */
     public function getContent()
     {
