@@ -1,0 +1,8 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#Result of || is always false.#'
+			path: src/Middleware/GzipResponse.php
+		-
+			message: '#Else branch is unreachable because previous condition is always true.#'
+			path: src/Model/ValidatedFiltered.php

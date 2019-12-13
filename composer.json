@@ -43,6 +43,6 @@
   },
   "scripts": {
     "test": "vendor/bin/phpunit -c phpunit.xml",
-    "phpstan": "vendor/bin/phpstan analyze -l 2 src/"
+    "phpstan": "vendor/bin/phpstan analyze -l 5 src/"
   }
 }
