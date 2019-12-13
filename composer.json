@@ -29,7 +29,8 @@
     "guzzlehttp/psr7": "^1.4"
   },
   "require-dev": {
-    "phpunit/phpunit": "^6.5"
+    "phpunit/phpunit": "^6.5",
+    "phpstan/phpstan": "^0.12.2"
   },
   "suggest": {
     "wyrihaximus/react-http-middleware-session": "session handling",
