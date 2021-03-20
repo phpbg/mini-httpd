@@ -26,7 +26,9 @@
 
 namespace PhpBg\MiniHttpd\Middleware;
 
+use GuzzleHttp\Psr7\Stream;
 use Psr\Http\Message\ServerRequestInterface;
+use React\EventLoop\LoopInterface;
 
 /**
  * Serve static files
@@ -48,11 +50,18 @@ class StaticContent
     protected $mimeNamesByExtension;
 
     /**
+     * @var LoopInterface
+     */
+    protected $loop;
+
+    /**
+     * @param LoopInterface $loop
      * @param string $publicPath Full path to the directory that contain files to serve. Ex: /var/www/public
      * @param array $mimeNamesByExtension array of mimes names, by (unique) extension. E.g. ['html' => 'application/html']
      */
-    public function __construct(string $publicPath, array $mimeNamesByExtension)
+    public function __construct(LoopInterface $loop, string $publicPath, array $mimeNamesByExtension)
     {
+        $this->loop = $loop;
         if (!is_dir($publicPath)) {
             throw new \RuntimeException();
         }
@@ -80,12 +89,12 @@ class StaticContent
             if ($mime !== null) {
                 $headers['Content-Type'] = $mime;
             }
-            return new \React\Http\Response(
+            return new \React\Http\Message\Response(
                 200,
                 $headers,
                 // Beware that this won't achieve good performance and scalability, mainly because native php file streams may or not be blocking, who knows...?
                 // @see https://bugs.php.net/bug.php?id=75538
-                fopen($realPath, 'rb')
+                new Stream(fopen($realPath, 'rb'))
             );
         }
 
@@ -94,7 +103,7 @@ class StaticContent
         }
 
         // If no next middleware, then issue a 404 not found
-        return new \React\Http\Response(
+        return new \React\Http\Message\Response(
             404
         );
     }

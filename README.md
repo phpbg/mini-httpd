@@ -5,7 +5,7 @@ This framework is designed to build quick proofs of concepts.
 
 It is **not** mature enough to run in production environments, because:
  * it still contains synchronous blocking code
- * react http itself is not stable
+ * it lacks a dependency (ioc) /configuration management
 
 ## License
 MIT

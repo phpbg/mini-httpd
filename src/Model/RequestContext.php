@@ -28,7 +28,7 @@ namespace PhpBg\MiniHttpd\Model;
 
 use PhpBg\MiniHttpd\Renderer\RendererInterface;
 use Psr\Http\Message\ResponseInterface;
-use React\Http\Response;
+use React\Http\Message\Response;
 
 /**
  * This class is used to pass data between all middlewares in both direction

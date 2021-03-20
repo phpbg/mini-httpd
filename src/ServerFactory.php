@@ -77,7 +77,7 @@ class ServerFactory
         if (isset($applicationContext->publicPath) && file_exists($applicationContext->publicPath)) {
             $applicationContext->logger->notice("Serving *all* files from: $applicationContext->publicPath");
             $applicationContext->logger->notice("Don't hide your secrets there");
-            $middlewares[] = new StaticContent($applicationContext->publicPath, $mimeDb->getNamesByExtension());
+            $middlewares[] = new StaticContent($applicationContext->loop, $applicationContext->publicPath, $mimeDb->getNamesByExtension());
         }
 
         // Render responses
@@ -111,7 +111,7 @@ class ServerFactory
     public static function create(ApplicationContext $applicationContext): Server
     {
         $middlewares = static::createDefaultStack($applicationContext);
-        $server = new Server($middlewares);
+        $server = new Server($applicationContext->loop, ...$middlewares);
 
         // Log server errors
         $server->on('error', function ($exception) use ($applicationContext) {

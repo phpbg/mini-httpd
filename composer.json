@@ -20,7 +20,7 @@
     "php": ">=7.0",
     "ext-zlib": "*",
     "ext-json": "*",
-    "react/http": "^0.8.5",
+    "react/http": "^1.0",
     "zendframework/zend-validator": "^2.10",
     "zendframework/zend-filter": "^2.8",
     "psr/log": "^1.0",
